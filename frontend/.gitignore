@@ -1,0 +1,6 @@
+# Ignorer node_modules
+frontend/node_modules/
+
+# Ignorer les builds de Next.js
+frontend/.next/
+node_modules

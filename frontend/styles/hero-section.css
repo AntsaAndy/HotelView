@@ -1,0 +1,28 @@
+.hero-slider {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+}
+
+.hero-track {
+  display: flex;
+  width: calc(800%); /* 4 images x 2 (duplication) = 8 parts */
+  animation: scroll 30s linear infinite;
+}
+
+.hero-slide {
+  flex: 0 0 12.5%; /* 100 / 8 = 12.5% */
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* défilement de la moitié pour l'infini */
+  }
+}
