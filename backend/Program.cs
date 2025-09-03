@@ -1,34 +1,53 @@
+using Backend.Data;
+using Microsoft.EntityFrameworkCore;
+using HotChocolate;
+using HotChocolate.AspNetCore;
+using Backend.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Ajoute la configuration CORS
+// PostgreSQL
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// CORS pour le frontend
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000") // ton front Next.js
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
+            policy.WithOrigins("http://localhost:3000")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
         });
 });
 
-// Ajout Redis (cache)
+// Redis
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = "localhost:6379"; ;
+    options.Configuration = "localhost:6379";
     options.InstanceName = "HotelView_";
 });
 
-// Ajout Controllers
+// Controllers
 builder.Services.AddControllers();
+
+// GraphQL
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<Backend.GraphQL.Query>()
+    .AddMutationType<Backend.GraphQL.Mutation>()
+    .AddFiltering()
+    .AddSorting();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -36,12 +55,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseCors("AllowFrontend");
-
 app.UseAuthorization();
-
 app.MapControllers();
+app.UsePlayground("/playground", "/graphql");
+app.MapGraphQL("/graphql");
 
 // Exemple endpoint WeatherForecast
 var summaries = new[]
@@ -66,6 +84,7 @@ app.MapGet("/weatherforecast", () =>
 
 app.Run();
 
+// WeatherForecast record
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
 {
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);

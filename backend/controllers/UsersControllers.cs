@@ -1,77 +1,68 @@
-using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using System.Text;
-using BCrypt.Net;
+using Backend.Data;
 using Backend.Models;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers;
 
 [ApiController]
-// Route de base = "/users"
-[Route("users")]
+[Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    private static List<User> users = new(); // stockage en mémoire (temporaire)
-    private readonly string jwtKey = "TaCleSecreteSuperSecurisee123!";
+    private readonly AppDbContext _context;
 
-    // ✅ Register
-    [HttpPost("register")]
-    public IActionResult Register([FromBody] RegisterDto dto)
+    public UsersController(AppDbContext context)
     {
-        if (users.Any(u => u.Email == dto.Email))
-            return BadRequest("Email déjà utilisé");
+        _context = context;
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterDto dto)
+    {
+        // Bloquer la création de comptes Admin, Moderateur, DataAnalyst
+        if (dto.Role == Role.Admin || dto.Role == Role.Moderateur || dto.Role == Role.DataAnalyst)
+            return BadRequest("Impossible de créer ce rôle via l'inscription.");
 
         var user = new User
         {
-            Id = users.Count + 1,
+            Username = dto.Username,
             Email = dto.Email,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
             Role = dto.Role
         };
-        users.Add(user);
 
-        return Ok("Utilisateur enregistré");
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+
+        return Ok("Utilisateur enregistré avec succès.");
     }
 
-    // ✅ Login
     [HttpPost("login")]
-    public IActionResult Login([FromBody] LoginDto dto)
+    public async Task<IActionResult> Login(LoginDto dto)
     {
-        var user = users.FirstOrDefault(u => u.Email == dto.Email);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
         if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
-            return Unauthorized("Identifiants invalides");
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(jwtKey);
-
-        var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
-            }),
-            Expires = DateTime.UtcNow.AddHours(2),
-            SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(key),
-                SecurityAlgorithms.HmacSha256Signature)
-        };
+            return Unauthorized("Email ou mot de passe incorrect.");
+        }
 
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        var jwtToken = tokenHandler.WriteToken(token);
-
-        return Ok(new { token = jwtToken });
+        // Ici tu peux générer un token JWT si tu veux
+        return Ok(new { user.Id, user.Username, user.Role });
     }
+}
 
-    // ✅ Route protégée
-    [HttpGet("protected")]
-    [Authorize(Roles = "Admin")]
-    public IActionResult AdminOnly()
-    {
-        return Ok("Bienvenue admin, tu es authentifié !");
-    }
+// DTO pour Register
+public class RegisterDto
+{
+    public string Username { get; set; } = "";
+    public string Email { get; set; } = "";
+    public string Password { get; set; } = "";
+    public Role Role { get; set; } = Role.User; // User ou Partner uniquement
+}
+
+// DTO pour Login
+public class LoginDto
+{
+    public string Email { get; set; } = "";
+    public string Password { get; set; } = "";
 }

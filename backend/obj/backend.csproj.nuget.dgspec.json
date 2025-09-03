@@ -49,15 +49,19 @@
             },
             "HotChocolate.AspNetCore": {
               "target": "Package",
-              "version": "[15.1.8, )"
+              "version": "[15.1.10, )"
             },
             "HotChocolate.AspNetCore.Playground": {
               "target": "Package",
               "version": "[10.5.5, )"
             },
+            "HotChocolate.AspNetCore.Voyager": {
+              "target": "Package",
+              "version": "[10.5.5, )"
+            },
             "HotChocolate.Data.EntityFramework": {
               "target": "Package",
-              "version": "[15.1.8, )"
+              "version": "[15.1.10, )"
             },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",

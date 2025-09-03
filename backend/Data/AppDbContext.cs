@@ -1,20 +1,45 @@
+using Backend.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Data
+namespace Backend.Data;
+
+public partial class AppDbContext : DbContext
 {
-    public class AppDbContext : DbContext
-    {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {}
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        // Exemple : table Users
-        public DbSet<User> Users { get; set; } 
-    }
+    // Table Users
+    public DbSet<User> Users { get; set; }
 
-    public class User
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public int Id { get; set; }
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
+        base.OnModelCreating(modelBuilder);
+
+        // Seed des comptes spéciaux (Admin, Moderateur, DataAnalyst)
+        modelBuilder.Entity<User>().HasData(
+            new User
+            {
+                Id = 1,
+                Username = "admin",
+                Email = "admin@site.com",
+                PasswordHash = "$2a$11$hashedpasswordforadmin123!", // Hash de "admin123!"
+                Role = Role.Admin
+            },
+            new User
+            {
+                Id = 2,
+                Username = "moderator",
+                Email = "moderator@site.com",
+                PasswordHash = "$2a$11$hashedpasswordformod123!", // Hash de "mod123!"
+                Role = Role.Moderateur
+            },
+            new User
+            {
+                Id = 3,
+                Username = "analyst",
+                Email = "analyst@site.com",
+                PasswordHash = "$2a$11$hashedpasswordforanalyst123!", // Hash de "analyst123!"
+                Role = Role.DataAnalyst
+            }
+        );
     }
 }

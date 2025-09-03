@@ -2,6 +2,7 @@
 using Backend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250828080159_FixSeedData")]
+    partial class FixSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,7 +56,7 @@ namespace backend.Migrations
                         {
                             Id = 1,
                             Email = "admin@site.com",
-                            PasswordHash = "$2a$11$hashedpasswordforadmin123!",
+                            PasswordHash = "admin123!",
                             Role = 2,
                             Username = "admin"
                         },
@@ -61,7 +64,7 @@ namespace backend.Migrations
                         {
                             Id = 2,
                             Email = "moderator@site.com",
-                            PasswordHash = "$2a$11$hashedpasswordformod123!",
+                            PasswordHash = "mod123!",
                             Role = 3,
                             Username = "moderator"
                         },
@@ -69,7 +72,7 @@ namespace backend.Migrations
                         {
                             Id = 3,
                             Email = "analyst@site.com",
-                            PasswordHash = "$2a$11$hashedpasswordforanalyst123!",
+                            PasswordHash = "analyst123!",
                             Role = 4,
                             Username = "analyst"
                         });

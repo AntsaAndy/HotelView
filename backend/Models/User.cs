@@ -2,9 +2,11 @@ namespace Backend.Models;
 
 public enum Role
 {
-    Visitor,
+    User,
     Partner,
-    Admin
+    Admin,
+    Moderateur,
+    DataAnalyst
 }
 
 public class User
@@ -13,5 +15,5 @@ public class User
     public string Username { get; set; } = "";
     public string Email { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
-    public Role Role { get; set; } = Role.Visitor;
+    public Role Role { get; set; } = Role.User;
 }
