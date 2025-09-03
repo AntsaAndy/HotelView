@@ -53,7 +53,7 @@ namespace backend.Migrations
                         {
                             Id = 1,
                             Email = "admin@site.com",
-                            PasswordHash = "$2a$11$hashedpasswordforadmin123!",
+                            PasswordHash = "$2a$11$abcdefghijklmnopqrstuvwx.yz1234567890",
                             Role = 2,
                             Username = "admin"
                         },
@@ -61,7 +61,7 @@ namespace backend.Migrations
                         {
                             Id = 2,
                             Email = "moderator@site.com",
-                            PasswordHash = "$2a$11$hashedpasswordformod123!",
+                            PasswordHash = "$2a$11$bcdefghijklmnopqrstuvwxy.z12345678901",
                             Role = 3,
                             Username = "moderator"
                         },
@@ -69,7 +69,7 @@ namespace backend.Migrations
                         {
                             Id = 3,
                             Email = "analyst@site.com",
-                            PasswordHash = "$2a$11$hashedpasswordforanalyst123!",
+                            PasswordHash = "$2a$11$cdefghijklmnopqrstuvwxyz.123456789012",
                             Role = 4,
                             Username = "analyst"
                         });

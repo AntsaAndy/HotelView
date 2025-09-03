@@ -1,0 +1,6 @@
+D:\HotelView\backend\obj\Debug\net8.0\HashGenerator.csproj.AssemblyReference.cache
+D:\HotelView\backend\obj\Debug\net8.0\HashGenerator.GeneratedMSBuildEditorConfig.editorconfig
+D:\HotelView\backend\obj\Debug\net8.0\HashGenerator.AssemblyInfoInputs.cache
+D:\HotelView\backend\obj\Debug\net8.0\HashGenerator.AssemblyInfo.cs
+D:\HotelView\backend\obj\Debug\net8.0\HashGenerator.csproj.CoreCompileInputs.cache
+D:\HotelView\backend\obj\Debug\net8.0\HashGenerator.sourcelink.json

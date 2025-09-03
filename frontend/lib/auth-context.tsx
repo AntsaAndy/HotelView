@@ -77,7 +77,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         "DataAnalyst": "data-analyst"
       }
 
-      const mappedRole = roleMapping[data.role] || "visitor"
+      // Handle case-insensitive role matching and fallback
+      const backendRole = data.role || data.Role || "User"
+      const mappedRole = roleMapping[backendRole] || roleMapping[backendRole.toLowerCase()] || "visitor"
 
       const user: User = {
         id: data.id.toString(),

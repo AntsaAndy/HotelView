@@ -47,7 +47,7 @@ public class UsersController : ControllerBase
         }
 
         // Ici tu peux générer un token JWT si tu veux
-        return Ok(new { user.Id, user.Username, user.Role });
+        return Ok(new { user.Id, user.Username, Role = user.Role.ToString() });
     }
 }
 

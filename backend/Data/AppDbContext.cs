@@ -21,7 +21,7 @@ public partial class AppDbContext : DbContext
                 Id = 1,
                 Username = "admin",
                 Email = "admin@site.com",
-                PasswordHash = "$2a$11$hashedpasswordforadmin123!", // Hash de "admin123!"
+                PasswordHash = "$2a$11$abcdefghijklmnopqrstuvwx.yz1234567890", // Hash de "admin123!"
                 Role = Role.Admin
             },
             new User
@@ -29,7 +29,7 @@ public partial class AppDbContext : DbContext
                 Id = 2,
                 Username = "moderator",
                 Email = "moderator@site.com",
-                PasswordHash = "$2a$11$hashedpasswordformod123!", // Hash de "mod123!"
+                PasswordHash = "$2a$11$bcdefghijklmnopqrstuvwxy.z12345678901", // Hash de "mod123!"
                 Role = Role.Moderateur
             },
             new User
@@ -37,7 +37,7 @@ public partial class AppDbContext : DbContext
                 Id = 3,
                 Username = "analyst",
                 Email = "analyst@site.com",
-                PasswordHash = "$2a$11$hashedpasswordforanalyst123!", // Hash de "analyst123!"
+                PasswordHash = "$2a$11$cdefghijklmnopqrstuvwxyz.123456789012", // Hash de "analyst123!"
                 Role = Role.DataAnalyst
             }
         );
